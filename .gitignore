@@ -1,0 +1,19 @@
+# Temp files
+*.eml
+Thumbs.db
+Desktop.ini
+
+# Outlook temp files
+*.tmp
+~$*
+
+# Python
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
