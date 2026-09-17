@@ -149,7 +149,7 @@ func (a *App) runMigration(request MigrationRequest) {
 		a.mu.Unlock()
 	}()
 
-	progress := MigrationProgress{Stage: "prepare", Status: "running", Message: "Checking your folders…"}
+	progress := MigrationProgress{Stage: "prepare", Status: "running", Message: "Checking the selected folders."}
 	a.emit(progress)
 
 	if request.PreventSleep {
@@ -163,7 +163,7 @@ func (a *App) runMigration(request MigrationRequest) {
 			return
 		}
 		progress.Stage = "convert"
-		progress.Message = "Converting Thunderbird mailboxes to EML…"
+		progress.Message = "Converting Thunderbird mailboxes to EML."
 		a.emit(progress)
 		converted, err := convertMboxTree(request.SourcePath, request.StagingPath, func(folder string, count int) {
 			progress.Folder = folder
@@ -197,7 +197,7 @@ func (a *App) runMigration(request MigrationRequest) {
 
 	progress.Stage = "import"
 	progress.Total = len(files)
-	progress.Message = "Importing messages into Classic Outlook…"
+	progress.Message = "Importing messages into Classic Outlook."
 	a.emit(progress)
 
 	importerPath, err := bundledImporterPath()
@@ -256,7 +256,7 @@ func (a *App) runMigration(request MigrationRequest) {
 
 	if !request.KeepStagingEML && !request.SkipConversion {
 		progress.Stage = "cleanup"
-		progress.Message = "Removing temporary EML files…"
+		progress.Message = "Removing temporary EML files."
 		a.emit(progress)
 		if err := os.RemoveAll(request.StagingPath); err != nil {
 			progress.Message = "Migration finished, but the temporary EML folder could not be removed."
@@ -265,7 +265,7 @@ func (a *App) runMigration(request MigrationRequest) {
 
 	progress.Stage = "complete"
 	progress.Status = "complete"
-	progress.Message = fmt.Sprintf("Done — %d messages imported into %s.", progress.Imported, request.TargetPSTName)
+	progress.Message = fmt.Sprintf("Import complete: %d messages imported into %s.", progress.Imported, request.TargetPSTName)
 	a.emit(progress)
 }
 

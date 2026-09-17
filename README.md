@@ -66,7 +66,7 @@ wails build -nsis
 
 1. Close Thunderbird so its mailbox files do not change during conversion.
 2. Open **Classic Outlook**.
-3. In Outlook, create or attach the destination PST from **File → Account Settings → Data Files**.
+3. In Outlook, create or attach the destination PST from **File > Account Settings > Data Files**.
 4. Start Mailbox Mover.
 5. Select Thunderbird's `Local Folders` directory. It is commonly under:
 
@@ -89,10 +89,10 @@ npm run build --prefix frontend
 
 ## Legacy scripts
 
-- `convert_mbox_to_eml.py` — original configurable Python mbox converter
-- `Import-ThunderbirdToOutlook.ps1` — original standalone Outlook importer
-- `Keep-Awake.ps1` — original standalone keep-awake helper
-- `scripts/Import-ThunderbirdToOutlook.ps1` — parameterized importer embedded into the desktop app
+- `convert_mbox_to_eml.py`: original configurable Python mbox converter
+- `Import-ThunderbirdToOutlook.ps1`: original standalone Outlook importer
+- `Keep-Awake.ps1`: original standalone keep-awake helper
+- `scripts/Import-ThunderbirdToOutlook.ps1`: parameterized importer embedded into the desktop app
 
 ## Important limitations
 

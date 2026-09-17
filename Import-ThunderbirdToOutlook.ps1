@@ -25,7 +25,7 @@ $SandboxDir = "C:\Users\Public\OutlookImportTemp"
 if (-not (Test-Path $SandboxDir)) { New-Item -ItemType Directory -Path $SandboxDir | Out-Null }
 $TempStagingFile = Join-Path $SandboxDir "temp_import.eml"
 
-# Outlook PST root folder name — must match name in Outlook sidebar exactly
+# Outlook PST root folder name; must match name in Outlook sidebar exactly
 $TargetPSTName = "Thunderbird_Archive"
 
 # =============================================================================
@@ -71,17 +71,17 @@ function Import-EMLFolder ($CurrentFSFolder, $CurrentOutlookFolder) {
             $CdoMsg = New-Object -ComObject "CDO.Message"
             $CdoMsg.DataSource.OpenObject($AdoStream, "_Stream")
 
-            # Create PostItem (Type 6) — works in any PST folder
+            # Create PostItem (Type 6), which works in any PST folder
             $MailItem = $CurrentOutlookFolder.Items.Add(6)
 
             # Force it to behave as standard email
             $MailItem.MessageClass = "IPM.Note"
 
-            # Subject — fall back to filename if empty
+            # Subject: fall back to filename if empty
             $DisplaySubject = if (![string]::IsNullOrEmpty($CdoMsg.Subject)) { $CdoMsg.Subject } else { $File.BaseName }
             $MailItem.Subject = $DisplaySubject
 
-            # Body — prefer HTML, fall back to plain text
+            # Body: prefer HTML, fall back to plain text
             if (![string]::IsNullOrEmpty($CdoMsg.HTMLBody)) {
                 $MailItem.HTMLBody = $CdoMsg.HTMLBody
             } else {

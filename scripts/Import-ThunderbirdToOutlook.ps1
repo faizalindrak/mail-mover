@@ -151,7 +151,7 @@ $Outlook = $null
 $Namespace = $null
 $TargetRoot = $null
 try {
-    Write-Output "STATUS|Connecting to Classic Outlook…"
+    Write-Output "STATUS|Connecting to Classic Outlook."
     $Outlook = [Runtime.InteropServices.Marshal]::GetActiveObject("Outlook.Application")
     $Namespace = $Outlook.GetNamespace("MAPI")
     try { $TargetRoot = $Namespace.Folders.Item($TargetPSTName) } catch {

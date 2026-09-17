@@ -57,7 +57,7 @@ const state = {
   progress: {
     stage: 'prepare',
     status: 'idle',
-    message: 'Ready when you are.',
+    message: 'Complete the setup to begin.',
     folder: '',
     current: 0,
     total: 0,
@@ -91,7 +91,7 @@ app.innerHTML = `
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <span id="platform-badge" class="badge badge-soft">Checking Outlook…</span>
+          <span id="platform-badge" class="badge badge-soft">Checking Outlook</span>
           <button id="theme-button" class="btn btn-ghost btn-circle" aria-label="Toggle colour theme">
             <i data-lucide="moon" class="size-5"></i>
           </button>
@@ -102,9 +102,9 @@ app.innerHTML = `
     <main class="mx-auto grid max-w-7xl gap-6 px-6 py-7 lg:grid-cols-[minmax(0,1fr)_21rem]">
       <section class="min-w-0 space-y-6" aria-labelledby="migration-title">
         <div>
-          <p class="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-primary">Guided migration</p>
-          <h2 id="migration-title" class="text-3xl font-bold tracking-tight">Move your mail with confidence</h2>
-          <p class="mt-2 max-w-2xl text-base-content/65">Choose your Thunderbird mail, confirm the Outlook archive, and let the app handle conversion and import.</p>
+          <p class="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-primary">Thunderbird to Outlook</p>
+          <h2 id="migration-title" class="text-3xl font-bold tracking-tight">Move Thunderbird mail into Outlook</h2>
+          <p class="mt-2 max-w-2xl text-base-content/65">Choose the mail source, an Outlook data file, and a folder for EML files. Keep Classic Outlook open during the import.</p>
         </div>
 
         <ul id="migration-steps" class="steps steps-horizontal w-full text-xs sm:text-sm">
@@ -122,7 +122,7 @@ app.innerHTML = `
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div>
                     <h3 class="card-title text-lg">1. Choose Thunderbird mail</h3>
-                    <p class="mt-1 text-sm text-base-content/60">Select the <strong>Local Folders</strong> directory from your Thunderbird profile.</p>
+                    <p id="source-description" class="mt-1 text-sm text-base-content/60">Select the <strong>Local Folders</strong> directory from your Thunderbird profile.</p>
                   </div>
                   <span id="source-badge" class="badge badge-ghost">Required</span>
                 </div>
@@ -156,7 +156,7 @@ app.innerHTML = `
                   <select id="pst-select" class="select w-full" disabled>
                     <option value="">Open Classic Outlook to load available PSTs</option>
                   </select>
-                  <p id="outlook-message" class="label">Checking Classic Outlook…</p>
+                  <p id="outlook-message" class="label">Checking Classic Outlook.</p>
                 </fieldset>
               </div>
             </div>
@@ -168,8 +168,8 @@ app.innerHTML = `
             <div class="flex items-start gap-4">
               <div class="grid size-11 shrink-0 place-items-center rounded-box bg-accent/20 text-accent-content"><i data-lucide="file-archive" class="size-6"></i></div>
               <div class="min-w-0 grow">
-                <h3 class="card-title text-lg">3. Temporary working folder</h3>
-                <p class="mt-1 text-sm text-base-content/60">Mailbox files are safely expanded to EML here before Outlook imports them.</p>
+                <h3 id="folder-title" class="card-title text-lg">3. Temporary working folder</h3>
+                <p id="folder-description" class="mt-1 text-sm text-base-content/60">The app writes converted EML files here before Outlook imports them.</p>
                 <div class="mt-4 flex gap-2">
                   <label class="input min-w-0 grow">
                     <i data-lucide="file-archive" class="size-4 text-base-content/45"></i>
@@ -211,7 +211,7 @@ app.innerHTML = `
             <div class="flex items-start justify-between gap-4">
               <div>
                 <div class="flex items-center gap-2"><span id="progress-spinner" class="loading loading-spinner loading-sm"></span><h3 id="progress-title" class="card-title text-lg">Preparing migration</h3></div>
-                <p id="progress-message" class="mt-2 text-sm text-base-content/65">Ready when you are.</p>
+                <p id="progress-message" class="mt-2 text-sm text-base-content/65">Checking the selected folders.</p>
               </div>
               <span id="progress-percent" class="badge badge-soft">0%</span>
             </div>
@@ -223,7 +223,7 @@ app.innerHTML = `
             </div>
             <div class="card-actions mt-2 justify-end">
               <button id="open-output" class="btn btn-ghost btn-sm hidden"><i data-lucide="external-link" class="size-4"></i>Open EML folder</button>
-              <button id="cancel-button" class="btn btn-outline btn-sm"><i data-lucide="pause" class="size-4"></i>Stop safely</button>
+              <button id="cancel-button" class="btn btn-outline btn-sm"><i data-lucide="pause" class="size-4"></i>Stop after current message</button>
             </div>
           </div>
         </div>
@@ -239,7 +239,7 @@ app.innerHTML = `
       <aside class="space-y-4 lg:sticky lg:top-6 lg:self-start" aria-label="Readiness summary">
         <div class="card card-border bg-base-100 shadow-sm">
           <div class="card-body">
-            <h3 class="card-title text-lg">Ready to move?</h3>
+            <h3 class="card-title text-lg">Setup status</h3>
             <ul class="list mt-2">
               <li class="list-row px-0"><span id="check-source-icon" class="text-base-content/30"><i data-lucide="circle" class="size-5"></i></span><div><div class="font-medium">Thunderbird source</div><div id="check-source" class="text-xs text-base-content/55">Not selected</div></div></li>
               <li class="list-row px-0"><span id="check-outlook-icon" class="text-base-content/30"><i data-lucide="circle" class="size-5"></i></span><div><div class="font-medium">Classic Outlook</div><div id="check-outlook" class="text-xs text-base-content/55">Checking</div></div></li>
@@ -262,7 +262,7 @@ app.innerHTML = `
         </div>
 
         <details class="collapse-arrow collapse border border-base-300 bg-base-100 shadow-sm">
-          <summary class="collapse-title font-semibold">What will happen?</summary>
+          <summary class="collapse-title font-semibold">Migration sequence</summary>
           <div class="collapse-content text-sm text-base-content/65">
             <ol class="list-decimal space-y-2 pl-4">
               <li>Read Thunderbird mbox files.</li>
@@ -337,14 +337,24 @@ function render(): void {
   element<HTMLInputElement>('keep-eml').checked = state.keepStagingEML;
   element<HTMLInputElement>('skip-conversion').checked = state.skipConversion;
 
-  element('source-badge').textContent = state.skipConversion ? 'Skipped' : state.sourcePath ? 'Selected' : 'Required';
+  element('source-badge').textContent = state.skipConversion ? 'Using EML folder' : state.sourcePath ? 'Selected' : 'Required';
   element('source-badge').className = state.sourcePath || state.skipConversion ? 'badge badge-success badge-soft' : 'badge badge-ghost';
+  element('source-description').textContent = state.skipConversion
+    ? 'Thunderbird conversion is off. Choose the folder that contains your EML files below.'
+    : 'Select the Local Folders directory from your Thunderbird profile.';
+  element('folder-title').textContent = state.skipConversion ? '3. EML source folder' : '3. Temporary working folder';
+  element('folder-description').textContent = state.skipConversion
+    ? 'Choose the folder that contains the EML files to import.'
+    : 'The app writes converted EML files here before Outlook imports them.';
+  element<HTMLInputElement>('staging-path').placeholder = state.skipConversion
+    ? 'Choose the folder that contains your EML files'
+    : 'Choose an empty folder with enough free space';
 
   const status = state.environment;
   const platformBadge = element('platform-badge');
   platformBadge.textContent = status?.outlookRunning ? 'Outlook ready' : status?.windows ? 'Outlook not connected' : 'Windows required';
   platformBadge.className = status?.outlookRunning ? 'badge badge-success badge-soft' : 'badge badge-warning badge-soft';
-  element('outlook-message').textContent = status?.message ?? 'Checking Classic Outlook…';
+  element('outlook-message').textContent = status?.message ?? 'Checking Classic Outlook.';
 
   const select = element<HTMLSelectElement>('pst-select');
   const names = status?.pstNames ?? [];
@@ -364,9 +374,9 @@ function render(): void {
   const start = element<HTMLButtonElement>('start-button');
   start.disabled = !isReady || isRunning;
   start.innerHTML = isRunning
-    ? `${icon('refresh-cw', 'size-5 animate-spin')}Moving messages…`
+    ? `${icon('refresh-cw', 'size-5 animate-spin')}Moving messages`
     : state.progress.status === 'complete'
-      ? `${icon('rotate-ccw', 'size-5')}Run another migration`
+      ? `${icon('rotate-ccw', 'size-5')}Start another migration`
       : `${icon('play', 'size-5')}Start migration${icon('arrow-right', 'size-5')}`;
 
   for (const id of ['source-button', 'staging-button', 'refresh-outlook']) {
@@ -404,7 +414,7 @@ function renderProgress(): void {
     cleanup: 'Cleaning up',
     complete: 'Migration complete',
   };
-  element('progress-title').textContent = progress.status === 'error' ? 'Migration needs attention' : progress.status === 'cancelled' ? 'Migration stopped' : titles[progress.stage] ?? 'Moving messages';
+  element('progress-title').textContent = progress.status === 'error' ? 'Migration could not continue' : progress.status === 'cancelled' ? 'Migration stopped' : titles[progress.stage] ?? 'Migration running';
   element('progress-message').textContent = progress.message;
   element('progress-percent').textContent = `${percent}%`;
   element<HTMLProgressElement>('progress-bar').value = percent;
@@ -478,7 +488,7 @@ element('staging-button').addEventListener('click', async () => {
 element('source-help').addEventListener('click', () => {
   const alert = element('form-alert');
   alert.className = 'alert alert-info';
-  alert.innerHTML = `${icon('info')}<span>Usually: <strong>%APPDATA%\\Thunderbird\\Profiles\\&lt;profile&gt;\\Mail\\Local Folders</strong>. In Thunderbird, open Account Settings → Local Folders to see the exact path.</span>`;
+  alert.innerHTML = `${icon('info')}<span>Usually: <strong>%APPDATA%\\Thunderbird\\Profiles\\&lt;profile&gt;\\Mail\\Local Folders</strong>. In Thunderbird, open Account Settings, then select Local Folders to see the exact path.</span>`;
   refreshIcons();
 });
 
@@ -511,7 +521,7 @@ element('theme-button').addEventListener('click', () => {
 
 element('start-button').addEventListener('click', async () => {
   clearError();
-  state.progress = { stage: 'prepare', status: 'running', message: 'Starting migration…', folder: '', current: 0, total: 0, converted: 0, imported: 0, failed: 0 };
+  state.progress = { stage: 'prepare', status: 'running', message: 'Checking the selected folders.', folder: '', current: 0, total: 0, converted: 0, imported: 0, failed: 0 };
   render();
   try {
     await StartMigration({
@@ -533,7 +543,7 @@ element('start-button').addEventListener('click', async () => {
 
 element('cancel-button').addEventListener('click', async () => {
   await CancelMigration();
-  element('progress-message').textContent = 'Stopping safely after the current message…';
+  element('progress-message').textContent = 'The app will stop after the current message.';
 });
 
 element('open-output').addEventListener('click', async () => {
