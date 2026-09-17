@@ -16,8 +16,14 @@ type commandResult struct {
 	err    error
 }
 
+func newBackgroundCommand(name string, args ...string) *exec.Cmd {
+	command := exec.Command(name, args...)
+	configureBackgroundCommand(command)
+	return command
+}
+
 func runPowerShell(script string) commandResult {
-	command := exec.Command("powershell.exe", "-NoProfile", "-NonInteractive", "-Command", script)
+	command := newBackgroundCommand("powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-Command", script)
 	output, err := command.CombinedOutput()
 	return commandResult{output: string(output), err: err}
 }

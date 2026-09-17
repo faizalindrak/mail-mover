@@ -134,7 +134,7 @@ func (a *App) OpenFolder(path string) error {
 		return errors.New("choose a folder first")
 	}
 	if goruntime.GOOS == "windows" {
-		return exec.Command("explorer.exe", path).Start()
+		return newBackgroundCommand("explorer.exe", path).Start()
 	}
 	if goruntime.GOOS == "darwin" {
 		return exec.Command("open", path).Start()
@@ -215,7 +215,7 @@ func (a *App) runMigration(request MigrationRequest) {
 	if request.MarkAsRead {
 		args = append(args, "-MarkAsRead")
 	}
-	command := exec.Command("powershell.exe", args...)
+	command := newBackgroundCommand("powershell.exe", args...)
 	stdout, err := command.StdoutPipe()
 	if err != nil {
 		a.fail(progress, err)
