@@ -1,7 +1,7 @@
 {
   "name": "mbox2pst-frontend",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,6 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.13",
     "daisyui": "^5.1.13",
-    "lucide": "^0.544.0",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.6.3",
     "vite": "^7.0.0"

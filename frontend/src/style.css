@@ -87,12 +87,10 @@ body,
 }
 
 body {
-  min-width: 640px;
+  min-width: 0;
   min-height: 100vh;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at 12% -15%, color-mix(in oklab, var(--color-primary) 12%, transparent) 0, transparent 34rem),
-    var(--color-base-200);
+  background: var(--color-base-200);
   color: var(--color-base-content);
 }
 
@@ -102,6 +100,33 @@ select {
   font: inherit;
 }
 
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+label:has(input:focus-visible) {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.step-index {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--color-base-300);
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.picker-row {
+  display: flex;
+  min-width: 0;
+  gap: 0.5rem;
+}
+
 .path-text {
   direction: ltr;
   unicode-bidi: plaintext;
@@ -109,4 +134,14 @@ select {
 
 .log-scroll {
   scrollbar-color: color-mix(in oklab, var(--color-base-content) 20%, transparent) transparent;
+}
+
+@media (max-width: 42rem) {
+  .picker-row {
+    flex-direction: column;
+  }
+
+  .picker-row .btn {
+    width: 100%;
+  }
 }

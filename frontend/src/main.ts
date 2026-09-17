@@ -1,29 +1,5 @@
 import './style.css';
 import {
-  ArrowRight,
-  Check,
-  CheckCircle2,
-  ChevronDown,
-  Circle,
-  ExternalLink,
-  FileArchive,
-  FolderOpen,
-  HardDrive,
-  Info,
-  Laptop,
-  Mail,
-  Moon,
-  Pause,
-  Play,
-  RefreshCw,
-  RotateCcw,
-  ShieldCheck,
-  Sun,
-  TriangleAlert,
-  XCircle,
-  createIcons,
-} from 'lucide';
-import {
   CancelMigration,
   GetEnvironmentStatus,
   OpenFolder,
@@ -79,77 +55,74 @@ if (!app) throw new Error('Application root was not found');
 
 app.innerHTML = `
   <div class="min-h-screen">
-    <header class="border-b border-base-300/80 bg-base-100/90 backdrop-blur">
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div class="flex items-center gap-3">
-          <div class="grid size-11 place-items-center rounded-box bg-primary text-primary-content shadow-sm">
-            <i data-lucide="mail" class="size-6"></i>
-          </div>
-          <div>
-            <h1 class="text-xl font-bold tracking-tight">Mailbox Mover</h1>
-            <p class="text-sm text-base-content/60">Thunderbird to Classic Outlook</p>
-          </div>
+    <header class="border-b border-base-300 bg-base-100">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">Mailbox Mover</h1>
+          <p class="text-sm text-base-content/70">Thunderbird to Classic Outlook</p>
         </div>
         <div class="flex items-center gap-2">
           <span id="platform-badge" class="badge badge-soft">Checking Outlook</span>
-          <button id="theme-button" class="btn btn-ghost btn-circle" aria-label="Toggle colour theme">
-            <i data-lucide="moon" class="size-5"></i>
-          </button>
+          <button id="theme-button" class="btn btn-ghost btn-sm min-h-11" type="button" aria-pressed="false">Dark theme</button>
         </div>
       </div>
     </header>
 
-    <main class="mx-auto grid max-w-7xl gap-6 px-6 py-7 lg:grid-cols-[minmax(0,1fr)_21rem]">
+    <main class="mx-auto grid max-w-7xl gap-6 px-4 py-7 sm:px-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
       <section class="min-w-0 space-y-6" aria-labelledby="migration-title">
         <div>
-          <p class="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-primary">Thunderbird to Outlook</p>
           <h2 id="migration-title" class="text-3xl font-bold tracking-tight">Move Thunderbird mail into Outlook</h2>
-          <p class="mt-2 max-w-2xl text-base-content/65">Choose the mail source, an Outlook data file, and a folder for EML files. Keep Classic Outlook open during the import.</p>
+          <p class="mt-2 max-w-2xl text-base-content/70">Choose the mail source, an Outlook data file, and a folder for EML files. Keep Classic Outlook open during the import.</p>
         </div>
 
-        <ul id="migration-steps" class="steps steps-horizontal w-full text-xs sm:text-sm">
+        <ul id="migration-steps" class="steps steps-vertical w-full text-xs sm:steps-horizontal sm:text-sm">
           <li class="step step-primary">Source</li>
           <li class="step">Outlook</li>
           <li class="step">Review</li>
           <li class="step">Move</li>
         </ul>
 
-        <div class="card card-border bg-base-100 shadow-sm">
+        <div class="card card-border bg-base-100">
           <div class="card-body gap-5">
             <div class="flex items-start gap-4">
-              <div class="grid size-11 shrink-0 place-items-center rounded-box bg-primary/10 text-primary"><i data-lucide="folder-open" class="size-6"></i></div>
+              <span class="step-index" aria-hidden="true">1</span>
               <div class="min-w-0 grow">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <h3 class="card-title text-lg">1. Choose Thunderbird mail</h3>
+                    <h3 class="card-title text-lg">Choose Thunderbird mail</h3>
                     <p id="source-description" class="mt-1 text-sm text-base-content/60">Select the <strong>Local Folders</strong> directory from your Thunderbird profile.</p>
                   </div>
                   <span id="source-badge" class="badge badge-ghost">Required</span>
                 </div>
-                <div class="mt-4 flex gap-2">
+                <div class="picker-row mt-4">
                   <label class="input min-w-0 grow">
-                    <i data-lucide="folder-open" class="size-4 text-base-content/45"></i>
                     <input id="source-path" class="path-text" type="text" placeholder="No source folder selected" readonly />
                   </label>
-                  <button id="source-button" class="btn"><i data-lucide="folder-open" class="size-4"></i>Browse</button>
+                  <button id="source-button" class="btn min-h-11" type="button">Browse</button>
                 </div>
-                <button id="source-help" class="mt-3 inline-flex items-center gap-1 text-sm text-primary hover:underline"><i data-lucide="info" class="size-4"></i>Where is this folder?</button>
+                <details class="collapse-arrow collapse mt-2 border border-base-300 bg-base-100">
+                  <summary class="collapse-title min-h-11 py-3 text-sm font-medium">Find the Local Folders directory</summary>
+                  <div class="collapse-content text-sm text-base-content/70">
+                    <p>In Thunderbird, open Account Settings, then select Local Folders to see the exact path.</p>
+                    <p class="mt-2 break-all font-mono text-xs">%APPDATA%\\Thunderbird\\Profiles\\&lt;profile&gt;\\Mail\\Local Folders</p>
+                  </div>
+                </details>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="card card-border bg-base-100 shadow-sm">
+        <div class="card card-border bg-base-100">
           <div class="card-body gap-5">
             <div class="flex items-start gap-4">
-              <div class="grid size-11 shrink-0 place-items-center rounded-box bg-secondary/20 text-secondary-content"><i data-lucide="hard-drive" class="size-6"></i></div>
+              <span class="step-index" aria-hidden="true">2</span>
               <div class="min-w-0 grow">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <h3 class="card-title text-lg">2. Choose your Outlook archive</h3>
+                    <h3 class="card-title text-lg">Choose your Outlook archive</h3>
                     <p class="mt-1 text-sm text-base-content/60">Classic Outlook must be open with the destination PST already attached.</p>
                   </div>
-                  <button id="refresh-outlook" class="btn btn-ghost btn-sm"><i data-lucide="refresh-cw" class="size-4"></i>Check again</button>
+                  <button id="refresh-outlook" class="btn btn-ghost btn-sm min-h-11" type="button">Check again</button>
                 </div>
                 <fieldset class="fieldset mt-3">
                   <legend class="fieldset-legend">Outlook data file</legend>
@@ -163,26 +136,25 @@ app.innerHTML = `
           </div>
         </div>
 
-        <div class="card card-border bg-base-100 shadow-sm">
+        <div class="card card-border bg-base-100">
           <div class="card-body gap-5">
             <div class="flex items-start gap-4">
-              <div class="grid size-11 shrink-0 place-items-center rounded-box bg-accent/20 text-accent-content"><i data-lucide="file-archive" class="size-6"></i></div>
+              <span class="step-index" aria-hidden="true">3</span>
               <div class="min-w-0 grow">
-                <h3 id="folder-title" class="card-title text-lg">3. Temporary working folder</h3>
+                <h3 id="folder-title" class="card-title text-lg">Temporary working folder</h3>
                 <p id="folder-description" class="mt-1 text-sm text-base-content/60">The app writes converted EML files here before Outlook imports them.</p>
-                <div class="mt-4 flex gap-2">
+                <div class="picker-row mt-4">
                   <label class="input min-w-0 grow">
-                    <i data-lucide="file-archive" class="size-4 text-base-content/45"></i>
                     <input id="staging-path" class="path-text" type="text" placeholder="Choose an empty folder with enough free space" readonly />
                   </label>
-                  <button id="staging-button" class="btn"><i data-lucide="folder-open" class="size-4"></i>Browse</button>
+                  <button id="staging-button" class="btn min-h-11" type="button">Browse</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="card card-border bg-base-100 shadow-sm">
+        <div class="card card-border bg-base-100">
           <div class="card-body">
             <h3 class="card-title text-lg">Import preferences</h3>
             <div class="mt-2 divide-y divide-base-300">
@@ -206,7 +178,7 @@ app.innerHTML = `
           </div>
         </div>
 
-        <div id="progress-card" class="card card-border hidden bg-base-100 shadow-sm" aria-live="polite">
+        <div id="progress-card" class="card card-border hidden bg-base-100 shadow-md" aria-live="polite">
           <div class="card-body">
             <div class="flex items-start justify-between gap-4">
               <div>
@@ -215,15 +187,17 @@ app.innerHTML = `
               </div>
               <span id="progress-percent" class="badge badge-soft">0%</span>
             </div>
-            <progress id="progress-bar" class="progress progress-primary mt-3 w-full" value="0" max="100"></progress>
+            <div id="progress-meter" class="mt-3 hidden">
+              <progress id="progress-bar" class="progress progress-primary w-full" value="0" max="100"></progress>
+            </div>
             <div class="stats stats-horizontal mt-3 w-full border border-base-300 bg-base-200/60">
               <div class="stat py-3"><div class="stat-title">Converted</div><div id="converted-count" class="stat-value text-2xl">0</div></div>
               <div class="stat py-3"><div class="stat-title">Imported</div><div id="imported-count" class="stat-value text-2xl">0</div></div>
               <div class="stat py-3"><div class="stat-title">Skipped</div><div id="failed-count" class="stat-value text-2xl">0</div></div>
             </div>
             <div class="card-actions mt-2 justify-end">
-              <button id="open-output" class="btn btn-ghost btn-sm hidden"><i data-lucide="external-link" class="size-4"></i>Open EML folder</button>
-              <button id="cancel-button" class="btn btn-outline btn-sm"><i data-lucide="pause" class="size-4"></i>Stop after current message</button>
+              <button id="open-output" class="btn btn-ghost btn-sm min-h-11 hidden" type="button">Open EML folder</button>
+              <button id="cancel-button" class="btn btn-outline btn-sm min-h-11" type="button">Stop after current message</button>
             </div>
           </div>
         </div>
@@ -231,26 +205,25 @@ app.innerHTML = `
         <div id="form-alert" role="alert" class="alert alert-error hidden"></div>
 
         <div class="flex flex-col-reverse items-stretch justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-          <p class="flex items-center gap-2 text-sm text-base-content/55"><i data-lucide="shield-check" class="size-4"></i>Your original Thunderbird files are never modified.</p>
-          <button id="start-button" class="btn btn-primary btn-lg min-w-56"><i data-lucide="play" class="size-5"></i>Start migration<i data-lucide="arrow-right" class="size-5"></i></button>
+          <p class="text-sm text-base-content/65">Your original Thunderbird files are never modified.</p>
+          <button id="start-button" class="btn btn-primary btn-lg min-h-12 min-w-56" type="button">Start migration</button>
         </div>
       </section>
 
       <aside class="space-y-4 lg:sticky lg:top-6 lg:self-start" aria-label="Readiness summary">
-        <div class="card card-border bg-base-100 shadow-sm">
+        <div class="card card-border bg-base-100">
           <div class="card-body">
             <h3 class="card-title text-lg">Setup status</h3>
             <ul class="list mt-2">
-              <li class="list-row px-0"><span id="check-source-icon" class="text-base-content/30"><i data-lucide="circle" class="size-5"></i></span><div><div class="font-medium">Thunderbird source</div><div id="check-source" class="text-xs text-base-content/55">Not selected</div></div></li>
-              <li class="list-row px-0"><span id="check-outlook-icon" class="text-base-content/30"><i data-lucide="circle" class="size-5"></i></span><div><div class="font-medium">Classic Outlook</div><div id="check-outlook" class="text-xs text-base-content/55">Checking</div></div></li>
-              <li class="list-row px-0"><span id="check-pst-icon" class="text-base-content/30"><i data-lucide="circle" class="size-5"></i></span><div><div class="font-medium">Destination PST</div><div id="check-pst" class="text-xs text-base-content/55">Not selected</div></div></li>
-              <li class="list-row px-0"><span id="check-staging-icon" class="text-base-content/30"><i data-lucide="circle" class="size-5"></i></span><div><div class="font-medium">Working folder</div><div id="check-staging" class="text-xs text-base-content/55">Not selected</div></div></li>
+              <li class="list-row px-0"><span id="check-source-status" class="badge badge-warning badge-soft">Required</span><div><div class="font-medium">Thunderbird source</div><div id="check-source" class="text-xs text-base-content/65">Not selected</div></div></li>
+              <li class="list-row px-0"><span id="check-outlook-status" class="badge badge-warning badge-soft">Required</span><div><div class="font-medium">Classic Outlook</div><div id="check-outlook" class="text-xs text-base-content/65">Checking</div></div></li>
+              <li class="list-row px-0"><span id="check-pst-status" class="badge badge-warning badge-soft">Required</span><div><div class="font-medium">Destination PST</div><div id="check-pst" class="text-xs text-base-content/65">Not selected</div></div></li>
+              <li class="list-row px-0"><span id="check-staging-status" class="badge badge-warning badge-soft">Required</span><div><div class="font-medium">Working folder</div><div id="check-staging" class="text-xs text-base-content/65">Not selected</div></div></li>
             </ul>
           </div>
         </div>
 
         <div class="alert alert-info alert-soft items-start">
-          <i data-lucide="info" class="mt-0.5 size-5 shrink-0"></i>
           <div>
             <p class="font-semibold">Before you begin</p>
             <ul class="mt-2 list-disc space-y-1 pl-4 text-sm">
@@ -261,7 +234,7 @@ app.innerHTML = `
           </div>
         </div>
 
-        <details class="collapse-arrow collapse border border-base-300 bg-base-100 shadow-sm">
+        <details class="collapse-arrow collapse border border-base-300 bg-base-100">
           <summary class="collapse-title font-semibold">Migration sequence</summary>
           <div class="collapse-content text-sm text-base-content/65">
             <ol class="list-decimal space-y-2 pl-4">
@@ -277,55 +250,20 @@ app.innerHTML = `
   </div>
 `;
 
-createIcons({
-  icons: {
-    ArrowRight,
-    Check,
-    CheckCircle2,
-    ChevronDown,
-    Circle,
-    ExternalLink,
-    FileArchive,
-    FolderOpen,
-    HardDrive,
-    Info,
-    Laptop,
-    Mail,
-    Moon,
-    Pause,
-    Play,
-    RefreshCw,
-    RotateCcw,
-    ShieldCheck,
-    Sun,
-    TriangleAlert,
-    XCircle,
-  },
-});
-
 const element = <T extends HTMLElement>(id: string) => {
   const found = document.getElementById(id) as T | null;
   if (!found) throw new Error(`Missing element: ${id}`);
   return found;
 };
 
-function icon(name: string, className = 'size-5'): string {
-  return `<i data-lucide="${name}" class="${className}"></i>`;
-}
-
-function refreshIcons(): void {
-  createIcons({
-    icons: { ArrowRight, Check, CheckCircle2, ChevronDown, Circle, ExternalLink, FileArchive, FolderOpen, HardDrive, Info, Laptop, Mail, Moon, Pause, Play, RefreshCw, RotateCcw, ShieldCheck, Sun, TriangleAlert, XCircle },
-  });
-}
-
 function basename(path: string): string {
   return path.split(/[\\/]/).filter(Boolean).pop() ?? path;
 }
 
 function setCheck(id: string, ready: boolean, text: string): void {
-  element(`${id}-icon`).innerHTML = ready ? icon('check-circle-2') : icon('circle');
-  element(`${id}-icon`).className = ready ? 'text-success' : 'text-base-content/30';
+  const status = element(`${id}-status`);
+  status.textContent = ready ? 'Ready' : 'Required';
+  status.className = ready ? 'badge badge-success badge-soft' : 'badge badge-warning badge-soft';
   element(id).textContent = text;
 }
 
@@ -342,7 +280,7 @@ function render(): void {
   element('source-description').textContent = state.skipConversion
     ? 'Thunderbird conversion is off. Choose the folder that contains your EML files below.'
     : 'Select the Local Folders directory from your Thunderbird profile.';
-  element('folder-title').textContent = state.skipConversion ? '3. EML source folder' : '3. Temporary working folder';
+  element('folder-title').textContent = state.skipConversion ? 'EML source folder' : 'Temporary working folder';
   element('folder-description').textContent = state.skipConversion
     ? 'Choose the folder that contains the EML files to import.'
     : 'The app writes converted EML files here before Outlook imports them.';
@@ -366,6 +304,9 @@ function render(): void {
 
   setCheck('check-source', state.skipConversion || Boolean(state.sourcePath), state.skipConversion ? 'Using existing EML files' : state.sourcePath ? basename(state.sourcePath) : 'Not selected');
   setCheck('check-outlook', Boolean(status?.outlookRunning), status?.outlookRunning ? 'Connected' : 'Not connected');
+  if (!status) {
+    element('check-outlook-status').textContent = 'Checking';
+  }
   setCheck('check-pst', Boolean(state.targetPSTName), state.targetPSTName || 'Not selected');
   setCheck('check-staging', Boolean(state.stagingPath), state.stagingPath ? basename(state.stagingPath) : 'Not selected');
 
@@ -373,11 +314,11 @@ function render(): void {
   const isReady = Boolean((state.sourcePath || state.skipConversion) && state.stagingPath && state.targetPSTName && status?.outlookRunning);
   const start = element<HTMLButtonElement>('start-button');
   start.disabled = !isReady || isRunning;
-  start.innerHTML = isRunning
-    ? `${icon('refresh-cw', 'size-5 animate-spin')}Moving messages`
+  start.textContent = isRunning
+    ? 'Moving messages'
     : state.progress.status === 'complete'
-      ? `${icon('rotate-ccw', 'size-5')}Start another migration`
-      : `${icon('play', 'size-5')}Start migration${icon('arrow-right', 'size-5')}`;
+      ? 'Start another migration'
+      : 'Start migration';
 
   for (const id of ['source-button', 'staging-button', 'refresh-outlook']) {
     element<HTMLButtonElement>(id).disabled = isRunning;
@@ -386,7 +327,6 @@ function render(): void {
 
   renderProgress();
   renderSteps();
-  refreshIcons();
 }
 
 function renderSteps(): void {
@@ -406,7 +346,8 @@ function renderProgress(): void {
   element('progress-card').classList.toggle('hidden', !visible);
   if (!visible) return;
 
-  const percent = progress.total > 0 ? Math.min(100, Math.round((progress.current / progress.total) * 100)) : progress.stage === 'convert' ? 20 : progress.stage === 'cleanup' ? 95 : progress.status === 'complete' ? 100 : 5;
+  const hasMeasuredProgress = progress.total > 0 && (progress.stage === 'import' || progress.status === 'complete');
+  const percent = hasMeasuredProgress ? Math.min(100, Math.round((progress.current / progress.total) * 100)) : 0;
   const titles: Record<string, string> = {
     prepare: 'Preparing migration',
     convert: 'Converting Thunderbird mail',
@@ -416,7 +357,8 @@ function renderProgress(): void {
   };
   element('progress-title').textContent = progress.status === 'error' ? 'Migration could not continue' : progress.status === 'cancelled' ? 'Migration stopped' : titles[progress.stage] ?? 'Migration running';
   element('progress-message').textContent = progress.message;
-  element('progress-percent').textContent = `${percent}%`;
+  element('progress-percent').textContent = hasMeasuredProgress ? `${percent}%` : 'Working';
+  element('progress-meter').classList.toggle('hidden', !hasMeasuredProgress);
   element<HTMLProgressElement>('progress-bar').value = percent;
   element('converted-count').textContent = progress.converted.toLocaleString();
   element('imported-count').textContent = progress.imported.toLocaleString();
@@ -439,9 +381,8 @@ function escapeHtml(value: string): string {
 
 function showError(message: unknown): void {
   const alert = element('form-alert');
-  alert.innerHTML = `${icon('triangle-alert')}<span>${escapeHtml(String(message))}</span>`;
+  alert.innerHTML = `<span>${escapeHtml(String(message))}</span>`;
   alert.classList.remove('hidden');
-  refreshIcons();
 }
 
 function clearError(): void {
@@ -485,13 +426,6 @@ element('staging-button').addEventListener('click', async () => {
   } catch (error) { showError(error); }
 });
 
-element('source-help').addEventListener('click', () => {
-  const alert = element('form-alert');
-  alert.className = 'alert alert-info';
-  alert.innerHTML = `${icon('info')}<span>Usually: <strong>%APPDATA%\\Thunderbird\\Profiles\\&lt;profile&gt;\\Mail\\Local Folders</strong>. In Thunderbird, open Account Settings, then select Local Folders to see the exact path.</span>`;
-  refreshIcons();
-});
-
 element('refresh-outlook').addEventListener('click', refreshEnvironment);
 
 element<HTMLSelectElement>('pst-select').addEventListener('change', (event) => {
@@ -515,8 +449,9 @@ element('theme-button').addEventListener('click', () => {
   const root = document.documentElement;
   const dark = root.dataset.theme === 'mailbox-dark';
   root.dataset.theme = dark ? 'mailbox' : 'mailbox-dark';
-  element('theme-button').innerHTML = icon(dark ? 'moon' : 'sun');
-  refreshIcons();
+  const button = element<HTMLButtonElement>('theme-button');
+  button.textContent = dark ? 'Dark theme' : 'Light theme';
+  button.setAttribute('aria-pressed', String(!dark));
 });
 
 element('start-button').addEventListener('click', async () => {
