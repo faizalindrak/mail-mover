@@ -11,6 +11,11 @@ Desktop.ini
 __pycache__/
 *.pyc
 
+# Wails / frontend
+build/bin/
+frontend/dist/
+frontend/node_modules/
+
 # IDE
 .vscode/
 .idea/
